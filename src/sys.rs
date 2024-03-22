@@ -137,6 +137,10 @@ impl Pts {
         ))
     }
 
+    pub fn clone_owned_fd(&self) -> std::io::Result<std::os::fd::OwnedFd> {
+        self.0.try_clone()
+    }
+
     pub fn session_leader(&self) -> impl FnMut() -> std::io::Result<()> {
         let pts_fd = self.0.as_raw_fd();
         move || {

@@ -150,6 +150,22 @@ impl tokio::io::AsyncWrite for Pty {
 /// See [`Pty::pts`] and [`Command::spawn`](crate::Command::spawn)
 pub struct Pts(pub(crate) crate::sys::Pts);
 
+impl Pts {
+    pub fn owned_fds(
+        &self,
+    ) -> std::io::Result<(
+        std::os::fd::OwnedFd,
+        std::os::fd::OwnedFd,
+        std::os::fd::OwnedFd,
+    )> {
+        Ok((
+            self.0.clone_owned_fd()?,
+            self.0.clone_owned_fd()?,
+            self.0.clone_owned_fd()?,
+        ))
+    }
+}
+
 /// Borrowed read half of a [`Pty`]
 pub struct ReadPty<'a>(&'a AsyncPty);
 
